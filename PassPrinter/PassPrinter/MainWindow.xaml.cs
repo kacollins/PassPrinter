@@ -153,5 +153,28 @@ namespace PassPrinter
             process.WaitForExit();
             txtInput.Focus();
         }
+
+        private void btnPrintPDF_OnClick(object sender, RoutedEventArgs e)
+        {
+            PassFile file = (sender as Button).DataContext as PassFile;
+            PrintPDF(file);
+        }
+
+        private static void PrintPDF(PassFile file)
+        {
+            string fileName = $"{PDFDirectory.FullName}\\{file.FileName}";
+
+            Process process = new Process
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    CreateNoWindow = true,
+                    Verb = "print",
+                    FileName = fileName
+                }
+            };
+
+            process.Start();
+        }
     }
 }
