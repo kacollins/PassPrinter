@@ -24,6 +24,13 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Name="btnOpenPDF" Content="Open" Click="btnOpenPDF_OnClick" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}" />
                     <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}" />
                     <DataGridTextColumn Header="Guid" Binding="{Binding Guid}" />

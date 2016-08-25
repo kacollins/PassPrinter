@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -131,6 +132,26 @@ namespace PassPrinter
             Uri url = new Uri($"file:///{fileName}", UriKind.Absolute);
             PDFPreview.Navigate(url);
             PDFPreview.Visibility = Visibility.Visible;
+        }
+
+        private void btnOpenPDF_OnClick(object sender, RoutedEventArgs e)
+        {
+            PassFile file = (sender as Button).DataContext as PassFile;
+            OpenPDF(file);
+        }
+
+        private void OpenPDF(PassFile file)
+        {
+            string fileName = $"{PDFDirectory.FullName}\\{file.FileName}";
+
+            Process process = new Process
+            {
+                StartInfo = { FileName = fileName }
+            };
+
+            process.Start();
+            process.WaitForExit();
+            txtInput.Focus();
         }
     }
 }
