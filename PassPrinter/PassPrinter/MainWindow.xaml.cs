@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -92,6 +93,15 @@ namespace PassPrinter
             {
                 List<PassFile> passFiles = files.Select(f => new PassFile(f.Name)).ToList();
                 grdPDFs.ItemsSource = passFiles;
+
+                if (passFiles.Count == 1)
+                {
+                    PreviewPDF(passFiles.First());
+                }
+                else
+                {
+                    PDFPreview.Visibility = Visibility.Collapsed;
+                }
             }
         }
 
@@ -106,6 +116,21 @@ namespace PassPrinter
             {
                 Search(txtInput.Text);
             }
+        }
+
+        private void btnPreviewPDF_OnClick(object sender, RoutedEventArgs e)
+        {
+            PassFile file = (sender as Button).DataContext as PassFile;
+            PreviewPDF(file);
+        }
+
+        private void PreviewPDF(PassFile file)
+        {
+            string fileName = $"{PDFDirectory.FullName}\\{file.FileName}";
+
+            Uri url = new Uri($"file:///{fileName}", UriKind.Absolute);
+            PDFPreview.Navigate(url);
+            PDFPreview.Visibility = Visibility.Visible;
         }
     }
 }
