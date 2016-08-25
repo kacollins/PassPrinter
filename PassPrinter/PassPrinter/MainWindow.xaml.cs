@@ -119,6 +119,19 @@ namespace PassPrinter
             }
         }
 
+        private void btnClear_OnClick(object sender, RoutedEventArgs e)
+        {
+            Clear();
+        }
+
+        private void Clear()
+        {
+            grdPDFs.ItemsSource = new List<PassFile>();
+            PDFPreview.Visibility = Visibility.Collapsed;
+            txtInput.Clear();
+            txtInput.Focus();
+        }
+
         private void btnPreviewPDF_OnClick(object sender, RoutedEventArgs e)
         {
             PassFile file = (sender as Button).DataContext as PassFile;
@@ -138,6 +151,7 @@ namespace PassPrinter
         {
             PassFile file = (sender as Button).DataContext as PassFile;
             OpenPDF(file);
+            Clear();
         }
 
         private void OpenPDF(PassFile file)
@@ -158,6 +172,7 @@ namespace PassPrinter
         {
             PassFile file = (sender as Button).DataContext as PassFile;
             PrintPDF(file);
+            Clear();
         }
 
         private static void PrintPDF(PassFile file)

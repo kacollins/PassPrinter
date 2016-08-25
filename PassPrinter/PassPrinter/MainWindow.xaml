@@ -13,6 +13,7 @@
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                 <Button Name="btnSearch" Content="Search" Click="btnSearch_OnClick" Width="100" Margin="5" IsDefault="true" />
+                <Button Name="btnClear" Content="Clear" Click="btnClear_OnClick" Width="100" Margin="5" />
             </StackPanel>
 
             <DataGrid Name="grdPDFs" AutoGenerateColumns="False">
