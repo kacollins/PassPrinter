@@ -1,7 +1,9 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
 
@@ -80,6 +82,30 @@ namespace PassPrinter
             }
 
             return text;
+        }
+
+        public void Search(string input)
+        {
+            FileInfo[] files = PDFDirectory?.GetFiles($"*{input}*.pdf");
+
+            if (files != null)
+            {
+                List<PassFile> passFiles = files.Select(f => new PassFile(f.Name)).ToList();
+                grdPDFs.ItemsSource = passFiles;
+            }
+        }
+
+        private void btnSearch_OnClick(object sender, RoutedEventArgs e)
+        {
+            Search(txtInput.Text);
+        }
+
+        private void txtInput_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (txtInput.Text.Trim().Length >= 3)
+            {
+                Search(txtInput.Text);
+            }
         }
     }
 }

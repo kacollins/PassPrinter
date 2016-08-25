@@ -5,8 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PassPrinter"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+        Title="MainWindow" Width="1200" Height="750">
+    <StackPanel Orientation="Vertical" Margin="10">
+        <Label Name="lblInput" Content="Enter your name:" Width="500" HorizontalAlignment="Left" />
+        <TextBox Name="txtInput" TextChanged="txtInput_OnTextChanged" />
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+            <Button Name="btnSearch" Content="Search" Click="btnSearch_OnClick" Width="100" Margin="5" IsDefault="true" />
+        </StackPanel>
+
+        <DataGrid Name="grdPDFs" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}" />
+                <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}" />
+                <DataGridTextColumn Header="Guid" Binding="{Binding Guid}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
 </Window>
