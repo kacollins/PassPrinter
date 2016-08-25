@@ -35,6 +35,7 @@ namespace PassPrinter
         {
             InitializeComponent();
             RenamePDFs();
+            txtInput.Focus();
         }
 
         private void RenamePDFs()
