@@ -6,9 +6,22 @@
         xmlns:local="clr-namespace:PassPrinter"
         mc:Ignorable="d"
         Title="MainWindow" Width="1200" Height="750">
-    <DockPanel Name="MainWindowStackPanel">
-        <StackPanel Orientation="Vertical" Margin="10">
-            <Label Name="lblInput" Content="Enter your name:" Width="500" HorizontalAlignment="Left" />
+    <DockPanel Name="MainWindowStackPanel" Background="#369">
+        <StackPanel Orientation="Vertical" Margin="50">
+            <StackPanel Height="150" Width="600" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" >
+                <StackPanel.Background>
+                    <ImageBrush ImageSource="Images\background.jpg" />
+                </StackPanel.Background>
+                <StackPanel Orientation="Horizontal">
+                    <Image VerticalAlignment="Top" Source="Images\sqlsat553_header.png" Name="sql_saturday" />
+                    <StackPanel Width="100"></StackPanel>
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Bottom" Height="135" >
+                        <Label FontFamily="Arial" FontSize="35" Foreground="White" Content="Pass" Height="44"/>
+                        <Label Foreground="#163963" FontSize="35" FontFamily="Arial" Content="Printing"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+            <Label Name="lblInput" Content="Enter your name:" Width="500" HorizontalAlignment="Left" Foreground="White" />
             <TextBox Name="txtInput" TextChanged="txtInput_OnTextChanged" />
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
@@ -16,7 +29,7 @@
                 <Button Name="btnClear" Content="Clear" Click="btnClear_OnClick" Width="100" Margin="5" />
             </StackPanel>
 
-            <DataGrid Name="grdPDFs" AutoGenerateColumns="False" MaxHeight="600">
+            <DataGrid Name="grdPDFs" AutoGenerateColumns="False">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
