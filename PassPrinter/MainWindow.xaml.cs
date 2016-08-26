@@ -54,11 +54,12 @@ namespace PassPrinter
         private void RenamePDF(FileInfo file)
         {
             string attendeeName = GetAttendeeName(file.FullName);
+            string newFileName = $"{file.DirectoryName}\\{attendeeName} {file.Name}";
 
             if (!string.IsNullOrWhiteSpace(attendeeName)
-                && file.Name.Length == PassFile.GuidLength + PassFile.ExtensionLength)
+                && file.Name.Length == PassFile.GuidLength + PassFile.ExtensionLength
+                && !File.Exists(newFileName))
             {
-                string newFileName = $"{file.DirectoryName}\\{attendeeName} {file.Name}";
                 File.Move(file.FullName, newFileName);
             }
         }
