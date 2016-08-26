@@ -16,7 +16,7 @@
                 <Button Name="btnClear" Content="Clear" Click="btnClear_OnClick" Width="100" Margin="5" />
             </StackPanel>
 
-            <DataGrid Name="grdPDFs" AutoGenerateColumns="False">
+            <DataGrid Name="grdPDFs" AutoGenerateColumns="False" MaxHeight="600">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
