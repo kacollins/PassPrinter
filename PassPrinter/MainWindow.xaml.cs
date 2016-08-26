@@ -70,14 +70,21 @@ namespace PassPrinter
 
         private void RenamePDF(FileInfo file)
         {
-            string attendeeName = GetAttendeeName(file.FullName);
-            string newFileName = $"{file.DirectoryName}\\{attendeeName} {file.Name}";
-
-            if (!string.IsNullOrWhiteSpace(attendeeName)
-                && file.Name.Length == PassFile.GuidLength + PassFile.ExtensionLength
-                && !File.Exists(newFileName))
+            if (file.Name.Length == GuidLength + PassFile.ExtensionLength)
             {
-                File.Move(file.FullName, newFileName);
+                string attendeeName = GetAttendeeName(file.FullName);
+
+                if (!string.IsNullOrWhiteSpace(attendeeName))
+                {
+                    string newFileName = $"{file.DirectoryName}\\{attendeeName}";
+
+                    while (File.Exists(newFileName + ".pdf"))
+                    {
+                        newFileName += PassFile.DuplicateHack;
+                    }
+
+                    File.Move(file.FullName, newFileName + ".pdf");
+                }
             }
         }
 
@@ -136,7 +143,11 @@ namespace PassPrinter
 
         private void txtInput_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            if (txtInput.Text.Trim().Length >= 3)
+            if (string.IsNullOrWhiteSpace(txtInput.Text))
+            {
+                Clear();
+            }
+            else if (txtInput.Text.Trim().Length >= 3 && grdPDFs.Items.Count != 1)
             {
                 Search(txtInput.Text);
             }

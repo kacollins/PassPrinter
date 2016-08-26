@@ -2,8 +2,8 @@
 {
     class PassFile
     {
-        public const int GuidLength = 36; //00000000-0000-0000-0000-000000000000
         public const int ExtensionLength = 4; //.pdf
+        public const char DuplicateHack = '_';
 
         public string FileName { get; set; }
 
@@ -14,10 +14,10 @@
             : string.Empty;
 
         public string LastName => FileName.Contains(" ")
-            ? FileName.Substring(IndexOfFirstSpace + 1, FileName.Length - GuidLength - ExtensionLength - IndexOfFirstSpace - 1).Trim()
+            ? FileName.Substring(IndexOfFirstSpace + 1, FileName.Length - ExtensionLength - IndexOfFirstSpace - 1)
+                .Replace(DuplicateHack, ' ')
+                .Trim()
             : string.Empty;
-
-        public string Guid => FileName.Substring(FileName.Length - GuidLength - ExtensionLength, GuidLength);
 
         public PassFile(string filename)
         {
