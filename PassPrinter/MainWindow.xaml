@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PassPrinter"
         mc:Ignorable="d"
         Title="MainWindow" Width="1200" Height="750">
-    <StackPanel Orientation="Horizontal">
+    <DockPanel Name="MainWindowStackPanel">
         <StackPanel Orientation="Vertical" Margin="10">
             <Label Name="lblInput" Content="Enter your name:" Width="500" HorizontalAlignment="Left" />
             <TextBox Name="txtInput" TextChanged="txtInput_OnTextChanged" />
@@ -46,8 +46,8 @@
             </DataGrid>
         </StackPanel>
 
-        <StackPanel Orientation="Vertical">
-            <WebBrowser Name="PDFPreview" Width="600" Height="700" />
-        </StackPanel>
-    </StackPanel>
+        <DockPanel>
+            <WebBrowser Name="PDFPreview" LoadCompleted="PDFPreview_LoadCompleted" />
+        </DockPanel>
+    </DockPanel>
 </Window>

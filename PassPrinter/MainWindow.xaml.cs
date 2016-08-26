@@ -142,6 +142,7 @@ namespace PassPrinter
 
         private void PreviewPDF(PassFile file)
         {
+            MainWindowStackPanel.IsEnabled = false;
             string fileName = $"{PDFDirectory.FullName}\\{file.FileName}";
 
             Uri url = new Uri($"file:///{fileName}", UriKind.Absolute);
@@ -192,6 +193,11 @@ namespace PassPrinter
             };
 
             process.Start();
+        }
+
+        private void PDFPreview_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+            MainWindowStackPanel.IsEnabled = true;
         }
     }
 }
