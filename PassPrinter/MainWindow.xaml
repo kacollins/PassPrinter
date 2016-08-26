@@ -14,49 +14,49 @@
                 </StackPanel.Background>
                 <StackPanel Orientation="Horizontal">
                     <Image VerticalAlignment="Top" Source="Images\sqlsat553_header.png" Name="sql_saturday" />
-                    <StackPanel Width="100"></StackPanel>
-                    <StackPanel Orientation="Vertical" VerticalAlignment="Bottom" Height="135" >
-                        <Label FontFamily="Arial" FontSize="35" Foreground="White" Content="Pass" Height="44"/>
-                        <Label Foreground="#163963" FontSize="35" FontFamily="Arial" Content="Printing"/>
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="5,0,0,0">
+                        <Label Content="SpeedPASS" FontFamily="Tahoma" FontWeight="Bold" Foreground="White" FontSize="40" />
+                        <Label Content="Printing" FontFamily="Tahoma" FontWeight="Bold" Foreground="#163963" FontSize="50" HorizontalAlignment="Center" />
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
-            <Label Name="lblInput" Content="Enter your name:" Width="500" HorizontalAlignment="Left" Foreground="White" />
-            <TextBox Name="txtInput" TextChanged="txtInput_OnTextChanged" />
+            <Label Name="lblInput" Content="Enter your name:" HorizontalAlignment="Left" Foreground="White" FontFamily="Tahoma" FontWeight="Bold" FontSize="20" />
+            <TextBox Name="txtInput" TextChanged="txtInput_OnTextChanged" Width="210" HorizontalAlignment="Left" FontSize="20" Margin="5" />
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                <Button Name="btnSearch" Content="Search" Click="btnSearch_OnClick" Width="100" Margin="5" IsDefault="true" />
-                <Button Name="btnClear" Content="Clear" Click="btnClear_OnClick" Width="100" Margin="5" />
+                <Button Name="btnSearch" Content="Search" Click="btnSearch_OnClick" Width="100" Margin="5" IsDefault="true" FontSize="20" />
+                <Button Name="btnClear" Content="Clear" Click="btnClear_OnClick" Width="100" Margin="5" FontSize="20" />
             </StackPanel>
 
-            <DataGrid Name="grdPDFs" AutoGenerateColumns="False">
-                <DataGrid.Columns>
-                    <DataGridTemplateColumn>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Name="btnPreviewPDF" Content="Preview" Click="btnPreviewPDF_OnClick" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Name="btnOpenPDF" Content="Open" Click="btnOpenPDF_OnClick" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Name="btnPrintPDF" Content="Print" Click="btnPrintPDF_OnClick" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}" />
-                    <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}" />
-                    <DataGridTextColumn Header="Guid" Binding="{Binding Guid}" />
-                </DataGrid.Columns>
-            </DataGrid>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <DataGrid Name="grdPDFs" AutoGenerateColumns="False" FontSize="20" Margin="5" MaxHeight="325">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="First Name" Binding="{Binding FirstName, Mode=OneWay}" />
+                        <DataGridTextColumn Header="Last Name" Binding="{Binding LastName, Mode=OneWay}" />
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Name="btnPreviewPDF" Content="Preview" Click="btnPreviewPDF_OnClick" Margin="5,0" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Name="btnOpenPDF" Content="Open" Click="btnOpenPDF_OnClick" Margin="5,0" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Name="btnPrintPDF" Content="Print" Click="btnPrintPDF_OnClick" Margin="5,0" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
         </StackPanel>
 
         <DockPanel>
