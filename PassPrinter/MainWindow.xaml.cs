@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,34 +17,50 @@ namespace PassPrinter
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static DirectoryInfo PDFDirectory
-        {
-            get
-            {
-                DirectoryInfo directoryInfo = new DirectoryInfo(Directory.GetCurrentDirectory());
-
-                while (directoryInfo != null && !directoryInfo.GetDirectories("PDFs").Any())
-                {
-                    directoryInfo = directoryInfo.Parent;
-                }
-
-                return directoryInfo?.GetDirectories("PDFs").FirstOrDefault();
-            }
-        }
+        private const int GuidLength = 36; //00000000-0000-0000-0000-000000000000
+        public static DirectoryInfo PDFDirectory { get; set; }
+        public static string CurrentDirectory { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
+            CurrentDirectory = GetCurrentDirectory();
+            PDFDirectory = GetPDFDirectory();
             RenamePDFs();
             txtInput.Focus();
         }
 
+        private static string GetCurrentDirectory()
+        {
+            string currentDirectory = Assembly.GetExecutingAssembly().Location;
+            currentDirectory = currentDirectory.Substring(0, currentDirectory.LastIndexOf("\\"));
+            return currentDirectory;
+        }
+
+        private static DirectoryInfo GetPDFDirectory()
+        {
+            DirectoryInfo directoryInfo = new DirectoryInfo(CurrentDirectory);
+
+            while (directoryInfo != null && !directoryInfo.GetDirectories("PDFs").Any())
+            {
+                directoryInfo = directoryInfo.Parent;
+            }
+
+            directoryInfo = directoryInfo?.GetDirectories("PDFs").First();
+
+            return directoryInfo;
+        }
+
         private void RenamePDFs()
         {
-            FileInfo[] files = PDFDirectory?.GetFiles("*.pdf");
-
-            if (files != null)
+            if (PDFDirectory == null)
             {
+                MessageBox.Show("PDF Directory not found.");
+            }
+            else
+            {
+                FileInfo[] files = PDFDirectory.GetFiles("*.pdf");
+
                 foreach (FileInfo file in files)
                 {
                     RenamePDF(file);
@@ -90,10 +107,14 @@ namespace PassPrinter
 
         public void Search(string input)
         {
-            FileInfo[] files = PDFDirectory?.GetFiles($"*{input}*.pdf");
-
-            if (files != null)
+            if (PDFDirectory == null)
             {
+                MessageBox.Show("PDF Directory not found.");
+            }
+            else
+            {
+                FileInfo[] files = PDFDirectory.GetFiles($"*{input}*.pdf");
+
                 List<PassFile> passFiles = files.Select(f => new PassFile(f.Name)).ToList();
                 grdPDFs.ItemsSource = passFiles;
 
