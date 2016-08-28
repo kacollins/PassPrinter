@@ -268,5 +268,16 @@ namespace PassPrinter
             MainWindowStackPanel.IsEnabled = true;
         }
 
+        private void grdPDFs_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (MessageBox.Show("Are you sure that you want to print this pass?", "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                PassFile file = grdPDFs.SelectedItem as PassFile;
+                PrintPDF(file);
+                MessageBox.Show($"{file.FullName}, your pass is in the queue to be printed!", "Success");
+                Clear();
+            }
+        }
+
     }
 }
