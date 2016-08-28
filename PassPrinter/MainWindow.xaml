@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Width="1200" Height="750">
     <DockPanel Name="MainWindowStackPanel" Background="#369">
-        <StackPanel Orientation="Vertical" Margin="50">
+        <StackPanel Orientation="Vertical" Margin="25">
             <StackPanel Height="150" Width="600" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" >
                 <StackPanel.Background>
                     <ImageBrush ImageSource="Images\background.jpg" />
@@ -20,37 +20,54 @@
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
-            <Label Name="lblInput" Content="Enter your name:" HorizontalAlignment="Left" Foreground="White" FontFamily="Tahoma" FontWeight="Bold" FontSize="20" />
-            <TextBox Name="txtInput" TextChanged="txtInput_OnTextChanged" Width="210" HorizontalAlignment="Left" FontSize="20" Margin="5" />
+            <Label Name="lblInput" Content="Enter your name:" HorizontalAlignment="Left" Foreground="White" FontFamily="Tahoma" FontWeight="Bold" FontSize="36" />
+            <TextBox Name="txtInput" TextChanged="txtInput_OnTextChanged" Width="250" HorizontalAlignment="Left" FontSize="36" Margin="5" />
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                <Button Name="btnSearch" Content="Search" Click="btnSearch_OnClick" Width="100" Margin="5" IsDefault="true" FontSize="20" />
-                <Button Name="btnClear" Content="Clear" Click="btnClear_OnClick" Width="100" Margin="5" FontSize="20" />
+                <Button Name="btnSearch" Content="Search" Click="btnSearch_OnClick" Width="120" Margin="5" FontSize="36" IsDefault="true" FontWeight="Bold" />
+                <Button Name="btnClear" Content="Clear" Click="btnClear_OnClick" Width="120" Margin="5" FontSize="36" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                <DataGrid Name="grdPDFs" AutoGenerateColumns="False" FontSize="20" Margin="5" MaxHeight="325">
+                <DataGrid Name="grdPDFs" AutoGenerateColumns="False" FontSize="36" Margin="5" MaxHeight="300">
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="FontWeight"  Value="Bold" />
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="First Name" Binding="{Binding FirstName, Mode=OneWay}" />
-                        <DataGridTextColumn Header="Last Name" Binding="{Binding LastName, Mode=OneWay}" />
-                        <DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="First Name">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Name="btnPreviewPDF" Content="Preview" Click="btnPreviewPDF_OnClick" Margin="5,0" />
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding FirstName, Mode=OneWay}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Last Name">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding LastName, Mode=OneWay}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Name="btnOpenPDF" Content="Open" Click="btnOpenPDF_OnClick" Margin="5,0" />
+                                    <Button Name="btnPreviewPDF" Content="Preview" Click="btnPreviewPDF_OnClick" Margin="10" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Name="btnPrintPDF" Content="Print" Click="btnPrintPDF_OnClick" Margin="5,0" />
+                                    <Button Name="btnOpenPDF" Content="Open" Click="btnOpenPDF_OnClick" Margin="10" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Name="btnPrintPDF" Content="Print" Click="btnPrintPDF_OnClick" Margin="10" FontWeight="Bold" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
