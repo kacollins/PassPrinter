@@ -1,27 +1,30 @@
-﻿namespace PassPrinter
+﻿using System.IO;
+
+namespace PassPrinter
 {
     class PassFile
     {
-        public const int ExtensionLength = 4; //.pdf
+        public const string Extension = ".pdf";
         public const char DuplicateHack = '_';
 
         public string FileName { get; set; }
 
-        public int IndexOfFirstSpace => FileName.IndexOf(" ");
+        private int IndexOfFirstSpace => FileName.IndexOf(" ");
 
-        public string FirstName => FileName.Contains(" ")
+        public string FirstName => IndexOfFirstSpace > 0
             ? FileName.Substring(0, IndexOfFirstSpace)
-            : string.Empty;
+            : FileName.Replace(Extension, "").Trim();
 
-        public string LastName => FileName.Contains(" ")
-            ? FileName.Substring(IndexOfFirstSpace + 1, FileName.Length - ExtensionLength - IndexOfFirstSpace - 1)
-                .Replace(DuplicateHack, ' ')
-                .Trim()
+        public string LastName => IndexOfFirstSpace > 0
+            ? FileName.Substring(IndexOfFirstSpace + 1, FileName.Length - IndexOfFirstSpace - 1)
+                .Replace(Extension, "").Replace(DuplicateHack, ' ').Trim()
             : string.Empty;
 
         public PassFile(string filename)
         {
             FileName = filename;
         }
+
+        public string GetFullPath(DirectoryInfo PDFDirectory) => $"{PDFDirectory?.FullName}\\{FileName}";
     }
 }

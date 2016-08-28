@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
 
@@ -17,9 +18,15 @@ namespace PassPrinter
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region Properties
+
+        private const string PDFDirectoryName = "PDFs";
         private const int GuidLength = 36; //00000000-0000-0000-0000-000000000000
-        public static DirectoryInfo PDFDirectory { get; set; }
-        public static string CurrentDirectory { get; set; }
+        private static DirectoryInfo PDFDirectory { get; set; }
+        private static string CurrentDirectory { get; set; }
+        private static string PDFDirectoryNotFoundErrorMessage => $"PDF Directory not found.\nCurrent Directory = {CurrentDirectory}";
+
+        #endregion
 
         public MainWindow()
         {
@@ -32,8 +39,18 @@ namespace PassPrinter
 
         private static string GetCurrentDirectory()
         {
-            string currentDirectory = Assembly.GetExecutingAssembly().Location;
-            currentDirectory = currentDirectory.Substring(0, currentDirectory.LastIndexOf("\\"));
+            string currentDirectory = string.Empty;
+
+            try
+            {
+                currentDirectory = Assembly.GetExecutingAssembly().Location;
+                currentDirectory = currentDirectory.Substring(0, currentDirectory.LastIndexOf("\\"));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
+
             return currentDirectory;
         }
 
@@ -41,36 +58,50 @@ namespace PassPrinter
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(CurrentDirectory);
 
-            while (directoryInfo != null && !directoryInfo.GetDirectories("PDFs").Any())
+            try
             {
-                directoryInfo = directoryInfo.Parent;
-            }
+                while (directoryInfo != null && !directoryInfo.GetDirectories(PDFDirectoryName).Any())
+                {
+                    directoryInfo = directoryInfo.Parent;
+                }
 
-            directoryInfo = directoryInfo?.GetDirectories("PDFs").First();
+                directoryInfo = directoryInfo?.GetDirectories(PDFDirectoryName).First();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
 
             return directoryInfo;
         }
 
-        private void RenamePDFs()
+        private static void RenamePDFs()
         {
             if (PDFDirectory == null)
             {
-                MessageBox.Show("PDF Directory not found.");
+                MessageBox.Show(PDFDirectoryNotFoundErrorMessage, "Error");
             }
             else
             {
-                FileInfo[] files = PDFDirectory.GetFiles("*.pdf");
-
-                foreach (FileInfo file in files)
+                try
                 {
-                    RenamePDF(file);
+                    FileInfo[] files = PDFDirectory.GetFiles($"*{PassFile.Extension}");
+
+                    foreach (FileInfo file in files)
+                    {
+                        RenamePDF(file);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error");
                 }
             }
         }
 
-        private void RenamePDF(FileInfo file)
+        private static void RenamePDF(FileInfo file)
         {
-            if (file.Name.Length == GuidLength + PassFile.ExtensionLength)
+            if (file.Name.Length == GuidLength + PassFile.Extension.Length)
             {
                 string attendeeName = GetAttendeeName(file.FullName);
 
@@ -78,28 +109,28 @@ namespace PassPrinter
                 {
                     string newFileName = $"{file.DirectoryName}\\{attendeeName}";
 
-                    while (File.Exists(newFileName + ".pdf"))
+                    while (File.Exists($"{newFileName}{PassFile.Extension}"))
                     {
                         newFileName += PassFile.DuplicateHack;
                     }
 
-                    File.Move(file.FullName, newFileName + ".pdf");
+                    File.Move(file.FullName, $"{newFileName}{PassFile.Extension}");
                 }
             }
         }
 
-        public string GetAttendeeName(string fileName)
+        private static string GetAttendeeName(string fileName)
         {
             string text = string.Empty;
 
-            if (File.Exists(fileName))
+            try
             {
                 PdfReader pdfReader = new PdfReader(fileName);
 
                 ITextExtractionStrategy strategy = new SimpleTextExtractionStrategy();
                 text = PdfTextExtractor.GetTextFromPage(pdfReader, 1, strategy);
 
-                text = Encoding.UTF8.GetString(ASCIIEncoding.Convert(Encoding.Default, Encoding.UTF8, Encoding.Default.GetBytes(text)));
+                text = Encoding.UTF8.GetString(Encoding.Convert(Encoding.Default, Encoding.UTF8, Encoding.Default.GetBytes(text)));
 
                 pdfReader.Close();
 
@@ -108,30 +139,41 @@ namespace PassPrinter
                     text = text.Substring(0, text.IndexOf("\n")).Trim();
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
 
             return text;
         }
 
-        public void Search(string input)
+        private void Search(string input)
         {
             if (PDFDirectory == null)
             {
-                MessageBox.Show("PDF Directory not found.");
+                MessageBox.Show(PDFDirectoryNotFoundErrorMessage, "Error");
             }
             else
             {
-                FileInfo[] files = PDFDirectory.GetFiles($"*{input}*.pdf");
-
-                List<PassFile> passFiles = files.Select(f => new PassFile(f.Name)).ToList();
-                grdPDFs.ItemsSource = passFiles;
-
-                if (passFiles.Count == 1)
+                try
                 {
-                    PreviewPDF(passFiles.First());
+                    FileInfo[] files = PDFDirectory.GetFiles($"*{input}*{PassFile.Extension}");
+
+                    List<PassFile> passFiles = files.Select(f => new PassFile(f.Name)).ToList();
+                    grdPDFs.ItemsSource = passFiles;
+
+                    if (passFiles.Count == 1)
+                    {
+                        PreviewPDF(passFiles.First());
+                    }
+                    else
+                    {
+                        PDFPreview.Visibility = Visibility.Collapsed;
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    PDFPreview.Visibility = Visibility.Collapsed;
+                    MessageBox.Show(ex.Message, "Error");
                 }
             }
         }
@@ -174,12 +216,19 @@ namespace PassPrinter
 
         private void PreviewPDF(PassFile file)
         {
-            MainWindowStackPanel.IsEnabled = false;
-            string fileName = $"{PDFDirectory.FullName}\\{file.FileName}";
+            try
+            {
+                MainWindowStackPanel.IsEnabled = false;
+                string fileName = file.GetFullPath(PDFDirectory);
 
-            Uri url = new Uri($"file:///{fileName}", UriKind.Absolute);
-            PDFPreview.Navigate(url);
-            PDFPreview.Visibility = Visibility.Visible;
+                Uri url = new Uri($"file:///{fileName}", UriKind.Absolute);
+                PDFPreview.Navigate(url);
+                PDFPreview.Visibility = Visibility.Visible;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
         }
 
         private void btnOpenPDF_OnClick(object sender, RoutedEventArgs e)
@@ -212,24 +261,32 @@ namespace PassPrinter
 
         private static void PrintPDF(PassFile file)
         {
-            string fileName = $"{PDFDirectory.FullName}\\{file.FileName}";
-
-            Process process = new Process
+            try
             {
-                StartInfo = new ProcessStartInfo()
-                {
-                    CreateNoWindow = true,
-                    Verb = "print",
-                    FileName = fileName
-                }
-            };
+                string fileName = file.GetFullPath(PDFDirectory);
 
-            process.Start();
+                Process process = new Process
+                {
+                    StartInfo = new ProcessStartInfo()
+                    {
+                        CreateNoWindow = true,
+                        Verb = "print",
+                        FileName = fileName
+                    }
+                };
+
+                process.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error");
+            }
         }
 
         private void PDFPreview_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
             MainWindowStackPanel.IsEnabled = true;
         }
+
     }
 }
