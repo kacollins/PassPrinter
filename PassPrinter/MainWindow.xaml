@@ -60,13 +60,6 @@
                         <DataGridTemplateColumn>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Name="btnOpenPDF" Content="Open" Click="btnOpenPDF_OnClick" Margin="10" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
                                     <Button Name="btnPrintPDF" Content="Print" Click="btnPrintPDF_OnClick" Margin="10" FontWeight="Bold" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

@@ -231,27 +231,6 @@ namespace PassPrinter
             }
         }
 
-        private void btnOpenPDF_OnClick(object sender, RoutedEventArgs e)
-        {
-            PassFile file = (sender as Button).DataContext as PassFile;
-            OpenPDF(file);
-            Clear();
-        }
-
-        private void OpenPDF(PassFile file)
-        {
-            string fileName = $"{PDFDirectory.FullName}\\{file.FileName}";
-
-            Process process = new Process
-            {
-                StartInfo = { FileName = fileName }
-            };
-
-            process.Start();
-            process.WaitForExit();
-            txtInput.Focus();
-        }
-
         private void btnPrintPDF_OnClick(object sender, RoutedEventArgs e)
         {
             PassFile file = (sender as Button).DataContext as PassFile;
