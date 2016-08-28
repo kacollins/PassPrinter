@@ -48,10 +48,15 @@ namespace PassPrinter
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error");
+                ShowErrorMessage(ex, "getting current directory");
             }
 
             return currentDirectory;
+        }
+
+        private static void ShowErrorMessage(Exception ex, string process)
+        {
+            MessageBox.Show(ex.Message, $"Error in {process}");
         }
 
         private static DirectoryInfo GetPDFDirectory()
@@ -69,7 +74,7 @@ namespace PassPrinter
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error");
+                ShowErrorMessage(ex, "getting PDF directory");
             }
 
             return directoryInfo;
@@ -79,7 +84,7 @@ namespace PassPrinter
         {
             if (PDFDirectory == null)
             {
-                MessageBox.Show(PDFDirectoryNotFoundErrorMessage, "Error");
+                MessageBox.Show(PDFDirectoryNotFoundErrorMessage, "Error in getting PDF directory");
             }
             else
             {
@@ -94,7 +99,7 @@ namespace PassPrinter
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error");
+                    ShowErrorMessage(ex, "renaming PDFs");
                 }
             }
         }
@@ -141,7 +146,7 @@ namespace PassPrinter
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error");
+                ShowErrorMessage(ex, "getting attendee name");
             }
 
             return text;
@@ -151,7 +156,7 @@ namespace PassPrinter
         {
             if (PDFDirectory == null)
             {
-                MessageBox.Show(PDFDirectoryNotFoundErrorMessage, "Error");
+                MessageBox.Show(PDFDirectoryNotFoundErrorMessage, "Error in getting PDF directory");
             }
             else
             {
@@ -173,7 +178,7 @@ namespace PassPrinter
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error");
+                    ShowErrorMessage(ex, "searching PDFs");
                 }
             }
         }
@@ -229,7 +234,7 @@ namespace PassPrinter
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error");
+                ShowErrorMessage(ex, "previewing PDF");
             }
         }
 
@@ -261,7 +266,7 @@ namespace PassPrinter
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error");
+                ShowErrorMessage(ex, "printing PDF");
             }
         }
 
