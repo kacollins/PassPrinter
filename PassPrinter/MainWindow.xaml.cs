@@ -235,6 +235,7 @@ namespace PassPrinter
         {
             PassFile file = (sender as Button).DataContext as PassFile;
             PrintPDF(file);
+            MessageBox.Show($"{file.FullName}, your pass is in the queue to be printed!", "Success");
             Clear();
         }
 

@@ -20,6 +20,8 @@ namespace PassPrinter
                 .Replace(Extension, "").Replace(DuplicateHack, ' ').Trim()
             : string.Empty;
 
+        public string FullName => $"{FirstName} {LastName}".Trim();
+
         public PassFile(string filename)
         {
             FileName = filename;
