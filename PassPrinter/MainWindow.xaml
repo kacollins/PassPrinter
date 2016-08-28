@@ -31,7 +31,8 @@
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="300">
                 <DataGrid Name="grdPDFs" AutoGenerateColumns="False" FontSize="36" Margin="5" MaxHeight="275"
-                          HorizontalAlignment="Left" VerticalAlignment="Top" MouseDoubleClick="grdPDFs_OnMouseDoubleClick">
+                          HorizontalAlignment="Left" VerticalAlignment="Top" MouseDoubleClick="grdPDFs_OnMouseDoubleClick" 
+                          SelectedCellsChanged="grdPDFs_OnSelectedCellsChanged">
                     <DataGrid.ColumnHeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="FontWeight"  Value="Bold" />

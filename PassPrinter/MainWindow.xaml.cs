@@ -270,6 +270,16 @@ namespace PassPrinter
             MainWindowStackPanel.IsEnabled = true;
         }
 
+        private void grdPDFs_OnSelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+            PassFile file = grdPDFs.SelectedItem as PassFile;
+
+            if (file != null)
+            {
+                PreviewPDF(file);
+            }
+        }
+
         private void grdPDFs_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             PassFile file = grdPDFs.SelectedItem as PassFile;
