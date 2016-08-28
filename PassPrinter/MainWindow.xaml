@@ -20,6 +20,7 @@
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
+
             <Label Name="lblInput" Content="Enter your name:" HorizontalAlignment="Left" Foreground="White" FontFamily="Tahoma" FontWeight="Bold" FontSize="36" />
             <TextBox Name="txtInput" TextChanged="txtInput_OnTextChanged" Width="250" HorizontalAlignment="Left" FontSize="36" Margin="5" />
 
@@ -28,9 +29,9 @@
                 <Button Name="btnClear" Content="Clear" Click="btnClear_OnClick" Width="120" Margin="5" FontSize="36" />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                <DataGrid Name="grdPDFs" AutoGenerateColumns="False" FontSize="36" Margin="5" MaxHeight="300" 
-                          MouseDoubleClick="grdPDFs_OnMouseDoubleClick">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="300">
+                <DataGrid Name="grdPDFs" AutoGenerateColumns="False" FontSize="36" Margin="5" MaxHeight="275"
+                          HorizontalAlignment="Left" VerticalAlignment="Top" MouseDoubleClick="grdPDFs_OnMouseDoubleClick">
                     <DataGrid.ColumnHeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="FontWeight"  Value="Bold" />
@@ -68,6 +69,8 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </StackPanel>
+
+            <Label Name="lblMessage" HorizontalAlignment="Left" Foreground="White" FontFamily="Tahoma" FontWeight="Bold" FontSize="20" />
         </StackPanel>
 
         <DockPanel>

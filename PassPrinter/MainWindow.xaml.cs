@@ -181,6 +181,7 @@ namespace PassPrinter
         private void btnSearch_OnClick(object sender, RoutedEventArgs e)
         {
             Search(txtInput.Text);
+            lblMessage.Content = string.Empty;
         }
 
         private void txtInput_OnTextChanged(object sender, TextChangedEventArgs e)
@@ -198,6 +199,7 @@ namespace PassPrinter
         private void btnClear_OnClick(object sender, RoutedEventArgs e)
         {
             Clear();
+            lblMessage.Content = string.Empty;
         }
 
         private void Clear()
@@ -235,7 +237,7 @@ namespace PassPrinter
         {
             PassFile file = (sender as Button).DataContext as PassFile;
             PrintPDF(file);
-            MessageBox.Show($"{file.FullName}, your pass is in the queue to be printed!", "Success");
+            lblMessage.Content = $"{file.FullName}, your pass is in the queue to be printed!";
             Clear();
         }
 
@@ -270,14 +272,14 @@ namespace PassPrinter
 
         private void grdPDFs_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (MessageBox.Show("Are you sure that you want to print this pass?", "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            PassFile file = grdPDFs.SelectedItem as PassFile;
+
+            if (MessageBox.Show($"Are you sure that you want to print the pass for {file.FullName}?", "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                PassFile file = grdPDFs.SelectedItem as PassFile;
                 PrintPDF(file);
-                MessageBox.Show($"{file.FullName}, your pass is in the queue to be printed!", "Success");
+                lblMessage.Content = $"{file.FullName}, your pass is in the queue to be printed!";
                 Clear();
             }
         }
-
     }
 }
