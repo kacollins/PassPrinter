@@ -37,6 +37,8 @@ namespace PassPrinter
             txtInput.Focus();
         }
 
+        #region Methods
+
         private static string GetCurrentDirectory()
         {
             string currentDirectory = string.Empty;
@@ -44,7 +46,7 @@ namespace PassPrinter
             try
             {
                 currentDirectory = Assembly.GetExecutingAssembly().Location;
-                currentDirectory = currentDirectory.Substring(0, currentDirectory.LastIndexOf("\\"));
+                currentDirectory = currentDirectory?.Substring(0, currentDirectory.LastIndexOf("\\"));
             }
             catch (Exception ex)
             {
@@ -183,42 +185,12 @@ namespace PassPrinter
             }
         }
 
-        private void btnSearch_OnClick(object sender, RoutedEventArgs e)
-        {
-            Search(txtInput.Text);
-            lblMessage.Content = string.Empty;
-        }
-
-        private void txtInput_OnTextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(txtInput.Text))
-            {
-                Clear();
-            }
-            else if (txtInput.Text.Trim().Length >= 3 && grdPDFs.Items.Count != 1)
-            {
-                Search(txtInput.Text);
-            }
-        }
-
-        private void btnClear_OnClick(object sender, RoutedEventArgs e)
-        {
-            Clear();
-            lblMessage.Content = string.Empty;
-        }
-
         private void Clear()
         {
             grdPDFs.ItemsSource = new List<PassFile>();
             PDFPreview.Visibility = Visibility.Collapsed;
             txtInput.Clear();
             txtInput.Focus();
-        }
-
-        private void btnPreviewPDF_OnClick(object sender, RoutedEventArgs e)
-        {
-            PassFile file = (sender as Button).DataContext as PassFile;
-            PreviewPDF(file);
         }
 
         private void PreviewPDF(PassFile file)
@@ -236,14 +208,6 @@ namespace PassPrinter
             {
                 ShowErrorMessage(ex, "previewing PDF");
             }
-        }
-
-        private void btnPrintPDF_OnClick(object sender, RoutedEventArgs e)
-        {
-            PassFile file = (sender as Button).DataContext as PassFile;
-            PrintPDF(file);
-            lblMessage.Content = $"{file.FullName}, your pass is in the queue to be printed!";
-            Clear();
         }
 
         private static void PrintPDF(PassFile file)
@@ -270,6 +234,52 @@ namespace PassPrinter
             }
         }
 
+        #endregion
+
+        #region Event Handlers
+
+        private void txtInput_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtInput.Text))
+            {
+                Clear();
+            }
+            else if (txtInput.Text.Trim().Length >= 3 && grdPDFs.Items.Count != 1)
+            {
+                Search(txtInput.Text);
+            }
+        }
+
+        private void btnSearch_OnClick(object sender, RoutedEventArgs e)
+        {
+            Search(txtInput.Text);
+            lblMessage.Content = string.Empty;
+        }
+
+        private void btnClear_OnClick(object sender, RoutedEventArgs e)
+        {
+            Clear();
+            lblMessage.Content = string.Empty;
+        }
+
+        private void btnPreviewPDF_OnClick(object sender, RoutedEventArgs e)
+        {
+            PassFile file = (sender as Button).DataContext as PassFile;
+            PreviewPDF(file);
+        }
+
+        private void btnPrintPDF_OnClick(object sender, RoutedEventArgs e)
+        {
+            PassFile file = (sender as Button).DataContext as PassFile;
+
+            if (file != null)
+            {
+                PrintPDF(file);
+                lblMessage.Content = $"{file.FullName}, your pass is in the queue to be printed!";
+                Clear();
+            }
+        }
+
         private void PDFPreview_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
             MainWindowStackPanel.IsEnabled = true;
@@ -289,12 +299,15 @@ namespace PassPrinter
         {
             PassFile file = grdPDFs.SelectedItem as PassFile;
 
-            if (MessageBox.Show($"Are you sure that you want to print the pass for {file.FullName}?", "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            if (file != null && MessageBox.Show($"Are you sure that you want to print the pass for {file.FullName}?",
+                                                "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 PrintPDF(file);
                 lblMessage.Content = $"{file.FullName}, your pass is in the queue to be printed!";
                 Clear();
             }
         }
+
+        #endregion
     }
 }
