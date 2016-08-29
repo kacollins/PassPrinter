@@ -8,12 +8,12 @@
         Title="MainWindow" Width="1200" Height="750">
     <DockPanel Name="MainWindowStackPanel" Background="#369">
         <StackPanel Orientation="Vertical" Margin="25">
-            <StackPanel Height="150" Width="600" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" >
+            <StackPanel Height="150" Width="600" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Name="Images">
                 <StackPanel.Background>
-                    <ImageBrush ImageSource="Images\background.jpg" />
+                    <ImageBrush ImageSource="EmbeddedImages/background.jpg" />
                 </StackPanel.Background>
                 <StackPanel Orientation="Horizontal">
-                    <Image VerticalAlignment="Top" Source="Images\sqlsat553_header.png" Name="sql_saturday" />
+                    <Image VerticalAlignment="Top" Source="EmbeddedImages/sqlsat_header.png" Name="header" />
                     <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="5,0,0,0">
                         <Label Content="SpeedPASS" FontFamily="Tahoma" FontWeight="Bold" Foreground="White" FontSize="40" />
                         <Label Content="Printing" FontFamily="Tahoma" FontWeight="Bold" Foreground="#163963" FontSize="50" HorizontalAlignment="Center" />
