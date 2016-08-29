@@ -204,6 +204,9 @@ namespace PassPrinter
                     List<PassFile> passFiles = files.Select(f => new PassFile(f.Name)).ToList();
                     grdPDFs.ItemsSource = passFiles;
 
+                    grdPDFs.Visibility = passFiles.Any() ? Visibility.Visible : Visibility.Collapsed;
+                    lblNoResults.Visibility = passFiles.Any() ? Visibility.Collapsed : Visibility.Visible;
+
                     if (passFiles.Count == 1)
                     {
                         PreviewPDF(passFiles.First());
@@ -223,6 +226,8 @@ namespace PassPrinter
         private void Clear()
         {
             grdPDFs.ItemsSource = new List<PassFile>();
+            grdPDFs.Visibility = Visibility.Collapsed;
+            lblNoResults.Visibility = Visibility.Collapsed;
             PDFPreview.Visibility = Visibility.Collapsed;
             txtInput.Clear();
             txtInput.Focus();

@@ -32,7 +32,7 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Height="300">
                 <DataGrid Name="grdPDFs" AutoGenerateColumns="False" FontSize="36" Margin="5" MaxHeight="275"
                           HorizontalAlignment="Left" VerticalAlignment="Top" MouseDoubleClick="grdPDFs_OnMouseDoubleClick" 
-                          SelectedCellsChanged="grdPDFs_OnSelectedCellsChanged">
+                          SelectedCellsChanged="grdPDFs_OnSelectedCellsChanged" Visibility="Collapsed">
                     <DataGrid.ColumnHeaderStyle>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="FontWeight"  Value="Bold" />
@@ -69,13 +69,15 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
+                <Label Name="lblNoResults" Content="No Results Found" HorizontalAlignment="Left" Foreground="White" FontFamily="Tahoma" FontWeight="Bold" FontSize="20" 
+                       Visibility="Collapsed" />
             </StackPanel>
 
             <Label Name="lblMessage" HorizontalAlignment="Left" Foreground="White" FontFamily="Tahoma" FontWeight="Bold" FontSize="20" />
         </StackPanel>
 
         <DockPanel>
-            <WebBrowser Name="PDFPreview" LoadCompleted="PDFPreview_LoadCompleted" />
+            <WebBrowser Name="PDFPreview" LoadCompleted="PDFPreview_LoadCompleted" Visibility="Collapsed" />
         </DockPanel>
     </DockPanel>
 </Window>
