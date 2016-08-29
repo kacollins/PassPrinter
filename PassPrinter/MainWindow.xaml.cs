@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
 
@@ -20,11 +21,16 @@ namespace PassPrinter
     {
         #region Properties
 
-        private const string PDFDirectoryName = "PDFs";
         private const int GuidLength = 36; //00000000-0000-0000-0000-000000000000
-        private static DirectoryInfo PDFDirectory { get; set; }
         private static string CurrentDirectory { get; set; }
-        private static string PDFDirectoryNotFoundErrorMessage => $"PDF Directory not found.\nCurrent Directory = {CurrentDirectory}";
+        private static DirectoryInfo PDFDirectory { get; set; }
+        private static DirectoryInfo CustomImagesDirectory { get; set; }
+
+        private enum Directories
+        {
+            CustomImages,
+            PDFs
+        }
 
         #endregion
 
@@ -32,8 +38,10 @@ namespace PassPrinter
         {
             InitializeComponent();
             CurrentDirectory = GetCurrentDirectory();
-            PDFDirectory = GetPDFDirectory();
+            PDFDirectory = GetDirectory(Directories.PDFs);
+            CustomImagesDirectory = GetDirectory(Directories.CustomImages);
             RenamePDFs();
+            LoadCustomImages();
             txtInput.Focus();
         }
 
@@ -61,22 +69,22 @@ namespace PassPrinter
             MessageBox.Show(ex.Message, $"Error in {process}");
         }
 
-        private static DirectoryInfo GetPDFDirectory()
+        private static DirectoryInfo GetDirectory(Directories directory)
         {
             DirectoryInfo directoryInfo = new DirectoryInfo(CurrentDirectory);
 
             try
             {
-                while (directoryInfo != null && !directoryInfo.GetDirectories(PDFDirectoryName).Any())
+                while (directoryInfo != null && !directoryInfo.GetDirectories(directory.ToString()).Any())
                 {
                     directoryInfo = directoryInfo.Parent;
                 }
 
-                directoryInfo = directoryInfo?.GetDirectories(PDFDirectoryName).First();
+                directoryInfo = directoryInfo?.GetDirectories(directory.ToString()).First();
             }
             catch (Exception ex)
             {
-                ShowErrorMessage(ex, "getting PDF directory");
+                ShowErrorMessage(ex, $"getting {directory} directory");
             }
 
             return directoryInfo;
@@ -86,7 +94,8 @@ namespace PassPrinter
         {
             if (PDFDirectory == null)
             {
-                MessageBox.Show(PDFDirectoryNotFoundErrorMessage, "Error in getting PDF directory");
+                string PDFDirectoryNotFoundErrorMessage = $"{Directories.PDFs} Directory not found.\nCurrent Directory = {CurrentDirectory}";
+                MessageBox.Show(PDFDirectoryNotFoundErrorMessage, $"Error in getting {Directories.PDFs} directory");
             }
             else
             {
@@ -154,11 +163,37 @@ namespace PassPrinter
             return text;
         }
 
+        private void LoadCustomImages()
+        {
+            if (CustomImagesDirectory != null)
+            {
+                FileInfo headerFile = CustomImagesDirectory.GetFiles("*header*").FirstOrDefault();
+
+                if (headerFile != null)
+                {
+                    header.Source = (ImageSource)new ImageSourceConverter().ConvertFromString(headerFile.FullName);
+                }
+
+                FileInfo backgroundFile = CustomImagesDirectory.GetFiles("*background*").FirstOrDefault();
+
+                if (backgroundFile != null)
+                {
+                    ImageSource backgroundSource = (ImageSource)new ImageSourceConverter().ConvertFromString(backgroundFile.FullName);
+
+                    Images.Background = new ImageBrush()
+                    {
+                        ImageSource = backgroundSource
+                    };
+                }
+            }
+        }
+
         private void Search(string input)
         {
             if (PDFDirectory == null)
             {
-                MessageBox.Show(PDFDirectoryNotFoundErrorMessage, "Error in getting PDF directory");
+                string PDFDirectoryNotFoundErrorMessage = $"{Directories.PDFs} Directory not found.\nCurrent Directory = {CurrentDirectory}";
+                MessageBox.Show(PDFDirectoryNotFoundErrorMessage, $"Error in getting {Directories.PDFs} directory");
             }
             else
             {
